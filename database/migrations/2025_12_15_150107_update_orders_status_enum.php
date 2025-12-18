@@ -13,7 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         // Change status column from enum to string to support all statuses
-        DB::statement("ALTER TABLE `orders` MODIFY COLUMN `status` VARCHAR(50) NOT NULL DEFAULT 'pending'");
+        Schema::table('orders', function (Blueprint $table) {
+            $table->string('status', 50)->default('pending')->change();
+        });
     }
 
     /**
@@ -21,7 +23,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert back to original enum (if needed)
-        DB::statement("ALTER TABLE `orders` MODIFY COLUMN `status` ENUM('pending', 'waiting_verification', 'paid', 'rejected') NOT NULL DEFAULT 'pending'");
+        // Revert back to string (PostgreSQL doesn't support enum in the same way)
+        Schema::table('orders', function (Blueprint $table) {
+            $table->string('status', 50)->default('pending')->change();
+        });
     }
 };
