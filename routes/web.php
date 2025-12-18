@@ -31,6 +31,11 @@ Route::get('/files/payment/{orderId}/{path}', [FileController::class, 'paymentPr
 // Landing page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
+// Health check endpoint for Railway
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok'], 200);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes
